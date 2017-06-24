@@ -74,7 +74,7 @@ public class NetworkUtils {
 
         Uri builtUri = Uri.parse(MOVIE_POSTER_BASE_URL).buildUpon()
                 .appendPath(IMAGE_SIZE)
-                .appendPath(poster_image_name.substring(1))
+                .appendPath(poster_image_name)
                 .build();
 
         URL url = null;
