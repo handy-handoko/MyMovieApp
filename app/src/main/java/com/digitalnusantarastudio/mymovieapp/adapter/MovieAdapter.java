@@ -23,6 +23,15 @@ import java.net.URL;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
     private Context context;
     private JSONArray movie_list_json_array;
+    private final ListItemClickListener listItemClickListener;
+
+    public MovieAdapter(ListItemClickListener listItemClickListener) {
+        this.listItemClickListener = listItemClickListener;
+    }
+
+    public interface ListItemClickListener{
+        void onListItemClick(int position);
+    }
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -51,12 +60,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder{
+    public JSONArray getMovie_list_json_array() {
+        return movie_list_json_array;
+    }
+
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView movie_poster_imageview;
 
         MovieViewHolder(View itemView) {
             super(itemView);
             movie_poster_imageview = (ImageView)itemView.findViewById(R.id.imv_movie_poster);
+            itemView.setOnClickListener(this);
         }
 
         void bind_image(int position){
@@ -71,6 +85,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             Glide.with(context)
                 .load(url)
                 .into(movie_poster_imageview);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listItemClickListener.onListItemClick(getAdapterPosition());
         }
     }
 }

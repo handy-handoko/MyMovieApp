@@ -1,6 +1,7 @@
 package com.digitalnusantarastudio.mymovieapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -22,9 +23,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
     private RecyclerView movie_recycler_view;
     private MovieAdapter adapter;
+    private static final String MOVIE_ITEM = "movie";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         movie_recycler_view = (RecyclerView)findViewById(R.id.movie_recycler_view);
 
-        adapter = new MovieAdapter();
+        adapter = new MovieAdapter(this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         movie_recycler_view.setLayoutManager(layoutManager);
         movie_recycler_view.setAdapter(adapter);
@@ -52,6 +54,20 @@ public class MainActivity extends AppCompatActivity {
             new NetworkConnectionTask().execute("popular");
         } else {
             Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onListItemClick(int position) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        JSONArray movie_list_json_array = adapter.getMovie_list_json_array();
+        try {
+            JSONObject movie_json_object = movie_list_json_array.getJSONObject(position);
+            intent.putExtra(MOVIE_ITEM, movie_json_object.toString());
+            startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "An error occured", Toast.LENGTH_LONG);
         }
     }
 
