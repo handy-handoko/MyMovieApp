@@ -1,5 +1,8 @@
 package com.digitalnusantarastudio.mymovieapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.digitalnusantarastudio.mymovieapp.adapter.MovieAdapter;
 import com.digitalnusantarastudio.mymovieapp.utilities.NetworkUtils;
@@ -34,15 +38,29 @@ public class MainActivity extends AppCompatActivity {
         movie_recycler_view.setLayoutManager(layoutManager);
         movie_recycler_view.setAdapter(adapter);
 
-        new NetworkConnectionTask().execute("popular");
+        refresh_data("popular");
     }
 
-    class NetworkConnectionTask extends AsyncTask<String, Void, JSONArray>{
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public void refresh_data(String sort_by) {
+        if(isOnline()){
+            new NetworkConnectionTask().execute("popular");
+        } else {
+            Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private class NetworkConnectionTask extends AsyncTask<String, Void, JSONArray>{
 
         @Override
         protected JSONArray doInBackground(String... params) {
             URL url = NetworkUtils.buildUrl(params[0]);
-            String response = null;
+            String response;
             JSONArray movie_list_json_array = null;
             try {
                 response = NetworkUtils.getResponseFromHttpUrl(url);
@@ -71,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_popular){
-            new NetworkConnectionTask().execute("popular");
+            refresh_data("popular");
 
             return true;
         }else if(item.getItemId() == R.id.action_top_rated){
-            new NetworkConnectionTask().execute("top_rated");
+            refresh_data("top_rated");
 
             return true;
         }
