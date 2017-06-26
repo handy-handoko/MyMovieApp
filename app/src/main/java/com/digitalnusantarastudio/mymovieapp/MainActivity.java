@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     public void refresh_data(String sort_by) {
         if(isOnline()){
-            new NetworkConnectionTask().execute("popular");
+            new NetworkConnectionTask().execute(sort_by);
         } else {
             Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
         }
