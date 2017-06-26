@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //initialize recycler view and adapter
         movie_recycler_view = (RecyclerView)findViewById(R.id.movie_recycler_view);
 
         adapter = new MovieAdapter(this);
@@ -40,15 +41,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         movie_recycler_view.setLayoutManager(layoutManager);
         movie_recycler_view.setAdapter(adapter);
 
+        //by default will load data and sort by popular
         refresh_data("popular");
     }
 
+    /**
+     * check if connect to internet. based on StackOverflow post below
+     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
+     */
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    /**
+     * load data by running NetworkConnectionTask
+     * @param sort_by data will be sorted by this param.
+     */
     public void refresh_data(String sort_by) {
         if(isOnline()){
             new NetworkConnectionTask().execute(sort_by);
@@ -57,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         }
     }
 
+    /**
+     * handling movie poster click event. will be put data to intent and open new activity
+     * @param position position item clicked
+     */
     @Override
     public void onListItemClick(int position) {
         Intent intent = new Intent(this, DetailActivity.class);
@@ -71,6 +85,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         }
     }
 
+    /**
+     * Task to connect to internet
+     * 1st param is url in String
+     * 3rd param is JSON array which respond from internet
+     */
     private class NetworkConnectionTask extends AsyncTask<String, Void, JSONArray>{
 
         @Override
@@ -102,6 +121,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         return true;
     }
 
+    /**
+     * refresh data on menu selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_popular){

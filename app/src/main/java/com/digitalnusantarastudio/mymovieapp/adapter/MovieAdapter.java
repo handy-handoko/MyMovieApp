@@ -17,7 +17,7 @@ import org.json.JSONException;
 import java.net.URL;
 
 /**
- * Created by handy on 23/06/17.
+ * adapter for show list of movie poster
  */
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder>{
@@ -25,10 +25,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private JSONArray movie_list_json_array;
     private final ListItemClickListener listItemClickListener;
 
+    //initialize adapter with listener
     public MovieAdapter(ListItemClickListener listItemClickListener) {
         this.listItemClickListener = listItemClickListener;
     }
 
+    //listener for click event. used when user click on movie poster to see about movie detail
     public interface ListItemClickListener{
         void onListItemClick(int position);
     }
@@ -64,6 +66,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return movie_list_json_array;
     }
 
+    //Holder class for movie list
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView movie_poster_imageview;
 
@@ -73,6 +76,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             itemView.setOnClickListener(this);
         }
 
+        //function for bind image to adapter
         void bind_image(int position){
             String movie_poster_file_name=null;
             try {

@@ -22,12 +22,14 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        //obtain view from xml
         ImageView movie_poster_imageview = (ImageView) findViewById(R.id.imv_movie_poster);
         TextView title_textview =(TextView) findViewById(R.id.txt_movie_title);
         TextView synopsis = (TextView) findViewById(R.id.txt_synopsis);
         TextView user_rating_textview = (TextView) findViewById(R.id.txt_user_rating);
         TextView release_date_textview = (TextView)findViewById(R.id.txt_release_date);
 
+        //fill view with data passed from intent to view
         Intent intent = getIntent();
         try {
             JSONObject movie_json_object = new JSONObject(intent.getStringExtra(MOVIE_ITEM));

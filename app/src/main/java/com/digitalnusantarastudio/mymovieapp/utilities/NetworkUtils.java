@@ -25,28 +25,26 @@ import java.net.URL;
 import java.util.Scanner;
 
 /**
- * These utilities will be used to communicate with the network.
+ * These utilities will be used to communicate with the network. this code based on NetworkUtils on Udacity Exercise
  */
 public class NetworkUtils {
 
-    final static private String GITHUB_BASE_URL =
-            "https://api.themoviedb.org/3/movie";
-    final static private String MOVIE_POSTER_BASE_URL =
-            "https://image.tmdb.org/t/p/";
+    final static private String MOVIEDB_BASE_URL = "https://api.themoviedb.org/3/movie";
+    final static private String MOVIE_POSTER_BASE_URL = "https://image.tmdb.org/t/p/";
 
     final static private String PARAM_API_KEY = "api_key";
-    final static private String API_KEY = "YOUR API KEY HERE";
+    final static private String API_KEY = "API KEY HERE";
     final static private String IMAGE_SIZE = "w185";
 
 
     /**
-     * Builds the URL used to query GitHub.
+     * Builds the URL used to query data from theMovieDB.
      *
-     * @param sort_by The keyword that will be queried for.
-     * @return The URL to use to query the GitHub.
+     * @param sort_by data will be sorted by sort_by param.
+     * @return The URL to use to query the theMovieDB.
      */
     public static URL buildUrl(String sort_by) {
-        Uri builtUri = Uri.parse(GITHUB_BASE_URL).buildUpon()
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendPath(sort_by)
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
@@ -63,14 +61,14 @@ public class NetworkUtils {
 
 
     /**
-     * Builds the URL used to query GitHub.
+     * Builds the URL used to get image from theMovieDB.
      *
-     * @param poster_image_name The keyword that will be queried for.
-     * @return The URL to use to query the GitHub.
+     * @param poster_image_name poster image name want to obtain.
+     * @return The URL to use to query the theMovieDB.
      */
     public static URL buildMoviePosterUrl(String poster_image_name) {
-
-        poster_image_name = poster_image_name.startsWith("/") ? poster_image_name.substring(1) : poster_image_name;//remove "/"
+        //remove "/" from image name
+        poster_image_name = poster_image_name.startsWith("/") ? poster_image_name.substring(1) : poster_image_name;
 
         Uri builtUri = Uri.parse(MOVIE_POSTER_BASE_URL).buildUpon()
                 .appendPath(IMAGE_SIZE)
