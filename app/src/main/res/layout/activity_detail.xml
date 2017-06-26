@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.digitalnusantarastudio.mymovieapp.DetailActivity">
+    tools:context="com.digitalnusantarastudio.mymovieapp.DetailActivity"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/txt_movie_title"
-        android:layout_width="368dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="70sp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="8dp" />
+        android:textSize="30sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/txt_release_date"
@@ -21,8 +33,12 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="101dp" />
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/txt_movie_title"
+        android:layout_toRightOf="@+id/imv_movie_poster"
+        android:layout_toEndOf="@+id/imv_movie_poster" />
 
     <TextView
         android:id="@+id/txt_user_rating"
@@ -30,25 +46,31 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-        tools:layout_editor_absoluteX="176dp"
-        tools:layout_editor_absoluteY="137dp" />
+        android:layout_below="@+id/txt_release_date"
+        android:layout_alignLeft="@+id/txt_release_date"
+        android:layout_alignStart="@+id/txt_release_date"
+        android:layout_marginTop="15dp"/>
 
     <TextView
         android:id="@+id/txt_synopsis"
-        android:layout_width="368dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
         android:text="TextView"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteY="262dp" />
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/imv_movie_poster"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:id="@+id/imv_movie_poster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:color/darker_gray"
-        tools:layout_editor_absoluteX="51dp"
-        tools:layout_editor_absoluteY="125dp" />
+        android:layout_width="92dp"
+        android:layout_height="130dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/txt_release_date"
+        app:srcCompat="@android:color/darker_gray" />
 
-</android.support.constraint.ConstraintLayout>
+
+    </RelativeLayout>
+</ScrollView>
