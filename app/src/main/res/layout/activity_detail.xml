@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:defa
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.digitalnusantarastudio.mymovieapp.DetailActivity"
@@ -70,6 +71,15 @@
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/txt_release_date"
         app:srcCompat="@android:color/darker_gray" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imv_movie_poster"
+        android:layout_alignLeft="@+id/txt_user_rating"
+        android:layout_alignStart="@+id/txt_user_rating"
+        app:srcCompat="@drawable/ic_bookmark_24dp" />
 
 
     </RelativeLayout>
