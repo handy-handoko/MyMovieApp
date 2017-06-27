@@ -24,9 +24,12 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
+
     private RecyclerView movie_recycler_view;
     private MovieAdapter adapter;
     private static final String MOVIE_ITEM = "movie";
+    private static final String LIFECYCLE_CALLBACKS_KEY = "sort_by";
+    private String sort_by;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         movie_recycler_view.setAdapter(adapter);
 
         //by default will load data and sort by popular
-        refresh_data("popular");
+        if((savedInstanceState != null) && savedInstanceState.containsKey(LIFECYCLE_CALLBACKS_KEY))
+            sort_by = savedInstanceState.getString(LIFECYCLE_CALLBACKS_KEY);
+        else
+            sort_by = "popular";
+        refresh_data();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence(LIFECYCLE_CALLBACKS_KEY, sort_by);
     }
 
     /**
@@ -56,10 +69,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     }
 
     /**
-     * load data by running NetworkConnectionTask
-     * @param sort_by data will be sorted by this param.
+     * load data by running NetworkConnectionTask. Data will be sorted using sortby variable
      */
-    public void refresh_data(String sort_by) {
+    public void refresh_data() {
         if(isOnline()){
             new NetworkConnectionTask().execute(sort_by);
         } else {
@@ -81,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             startActivity(intent);
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(this, "An error occured", Toast.LENGTH_LONG);
+            Toast.makeText(this, "An error occured", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -129,11 +141,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_popular){
-            refresh_data("popular");
+            sort_by = "popular";
+            refresh_data();
 
             return true;
         }else if(item.getItemId() == R.id.action_top_rated){
-            refresh_data("top_rated");
+            sort_by = "top_rated";
+            refresh_data();
 
             return true;
         }
