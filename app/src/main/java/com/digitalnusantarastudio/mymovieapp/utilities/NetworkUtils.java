@@ -107,6 +107,7 @@ public class NetworkUtils {
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendPath(movie_id)
                 .appendPath(VIDEOS_ENDPOINT_SEGMENT)
+                .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
 
         URL url = null;
@@ -128,6 +129,7 @@ public class NetworkUtils {
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
                 .appendPath(movie_id)
                 .appendPath(REVIEWS_ENDPOINT_SEGMENT)
+                .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
 
         URL url = null;
