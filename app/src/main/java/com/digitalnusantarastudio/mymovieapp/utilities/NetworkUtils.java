@@ -15,6 +15,8 @@
  */
 package com.digitalnusantarastudio.mymovieapp.utilities;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -38,6 +40,15 @@ public class NetworkUtils {
     final static private String VIDEOS_ENDPOINT_SEGMENT = "videos";
     final static private String REVIEWS_ENDPOINT_SEGMENT = "review";
 
+
+    /**
+     * check if connect to internet. based on StackOverflow post below
+     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
+     */
+    public static boolean isOnline(ConnectivityManager cm) {
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
     /**
      * Builds the URL used to query data from theMovieDB.

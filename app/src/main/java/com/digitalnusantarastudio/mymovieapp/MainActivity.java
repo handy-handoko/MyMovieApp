@@ -59,20 +59,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     }
 
     /**
-     * check if connect to internet. based on StackOverflow post below
-     * https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
-     */
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-    /**
      * load data by running NetworkConnectionTask. Data will be sorted using sortby variable
      */
     public void refresh_data() {
-        if(isOnline()){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(NetworkUtils.isOnline(cm)){
             new NetworkConnectionTask().execute(sort_by);
         } else {
             Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
