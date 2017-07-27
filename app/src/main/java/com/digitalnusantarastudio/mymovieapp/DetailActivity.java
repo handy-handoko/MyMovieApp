@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.digitalnusantarastudio.mymovieapp.adapter.ReviewAdapter;
 import com.digitalnusantarastudio.mymovieapp.adapter.TrailerAdapter;
 import com.digitalnusantarastudio.mymovieapp.utilities.NetworkUtils;
 
@@ -27,8 +28,12 @@ import java.net.URL;
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.ListItemClickListener{
     private static final String MOVIE_ITEM = "movie";
     private RecyclerView trailer_recycler_view;
+    private RecyclerView review_recycler_view;
     private TrailerAdapter trailer_adapter;
+    private ReviewAdapter review_adapter;
     private String movie_id;
+    private final static String TRAILER_TAG = "trailer";
+    private final static String REVIEW_TAG = "review";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +66,18 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         //initialize recycler view and adapter
         trailer_recycler_view = (RecyclerView)findViewById(R.id.trailer_recycler_view);
-
+        review_recycler_view = (RecyclerView)findViewById(R.id.review_recycler_view);
         trailer_adapter = new TrailerAdapter(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        trailer_recycler_view.setLayoutManager(layoutManager);
+        review_adapter = new ReviewAdapter();
+
+        LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(this);
+
+        trailer_recycler_view.setLayoutManager(trailerLayoutManager);
+        review_recycler_view.setLayoutManager(reviewLayoutManager);
+
         trailer_recycler_view.setAdapter(trailer_adapter);
+        review_recycler_view.setAdapter(review_adapter);
 
         refresh_data();
     }
@@ -83,28 +95,43 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
      * 1st param is movie id in JSON
      * 3rd param is JSON array which respond from internet
      */
-    private class NetworkConnectionTask extends AsyncTask<String, Void, JSONArray> {
+    private class NetworkConnectionTask extends AsyncTask<String, Void, JSONObject> {
 
         @Override
-        protected JSONArray doInBackground(String... params) {
-            URL url = NetworkUtils.buildMovieVideoUrl(params[0]);
+        protected JSONObject doInBackground(String... params) {
+            URL trailer_url = NetworkUtils.buildMovieVideoUrl(params[0]);
+            URL review_url = NetworkUtils.buildMovieReviewUrl(params[0]);
             String response;
-            JSONArray movie_list_json_array = null;
+            JSONArray movie_trailer_json_array = null;
+            JSONArray movie_review_json_array = null;
+            JSONObject returnJsonObject = new JSONObject();
             try {
-                response = NetworkUtils.getResponseFromHttpUrl(url);
-                JSONObject response_json_object = new JSONObject(response);
-                movie_list_json_array = response_json_object.getJSONArray("results");
+                response = NetworkUtils.getResponseFromHttpUrl(trailer_url);
+                JSONObject trailer_response_json_object = new JSONObject(response);
+                movie_trailer_json_array = trailer_response_json_object.getJSONArray("results");
+
+                response = NetworkUtils.getResponseFromHttpUrl(review_url);
+                JSONObject review_response_json_object = new JSONObject(response);
+                movie_review_json_array = review_response_json_object.getJSONArray("results");
+
+                returnJsonObject.put(TRAILER_TAG, movie_trailer_json_array);
+                returnJsonObject.put(REVIEW_TAG, movie_review_json_array);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return movie_list_json_array;
+            return returnJsonObject;
         }
 
         @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            trailer_adapter.setData(jsonArray);
+        protected void onPostExecute(JSONObject jsonObject) {
+            try {
+                trailer_adapter.setData(jsonObject.getJSONArray(TRAILER_TAG));
+                review_adapter.setData(jsonObject.getJSONArray(REVIEW_TAG));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
