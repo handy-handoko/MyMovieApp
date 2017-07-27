@@ -38,7 +38,7 @@ public class NetworkUtils {
     final static private String API_KEY = "API KEY HERE";
     final static private String IMAGE_SIZE = "w185";
     final static private String VIDEOS_ENDPOINT_SEGMENT = "videos";
-    final static private String REVIEWS_ENDPOINT_SEGMENT = "review";
+    final static private String REVIEWS_ENDPOINT_SEGMENT = "reviews";
 
 
     /**
