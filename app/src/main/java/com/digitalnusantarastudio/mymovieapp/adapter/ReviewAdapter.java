@@ -25,7 +25,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         boolean shouldAttachToParentImmediately = false;
-        View view = LayoutInflater.from(context).inflate(R.layout.trailer_list_item, parent, shouldAttachToParentImmediately);
+        View view = LayoutInflater.from(context).inflate(R.layout.review_list_item, parent, shouldAttachToParentImmediately);
 
         return new ReviewViewHolder(view);
     }
