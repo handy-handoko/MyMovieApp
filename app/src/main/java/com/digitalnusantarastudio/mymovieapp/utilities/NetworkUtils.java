@@ -35,6 +35,8 @@ public class NetworkUtils {
     final static private String PARAM_API_KEY = "api_key";
     final static private String API_KEY = "API KEY HERE";
     final static private String IMAGE_SIZE = "w185";
+    final static private String VIDEOS_ENDPOINT_SEGMENT = "videos";
+    final static private String REVIEWS_ENDPOINT_SEGMENT = "review";
 
 
     /**
@@ -73,6 +75,48 @@ public class NetworkUtils {
         Uri builtUri = Uri.parse(MOVIE_POSTER_BASE_URL).buildUpon()
                 .appendPath(IMAGE_SIZE)
                 .appendPath(poster_image_name)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    /**
+     *
+     * @param movie_id
+     * @return
+     */
+    public static URL buildMovieVideoUrl(String movie_id){
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(movie_id)
+                .appendPath(VIDEOS_ENDPOINT_SEGMENT)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    /**
+     *
+     * @param movie_id
+     * @return
+     */
+    public static URL buildMovieReviewUrl(String movie_id){
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .appendPath(movie_id)
+                .appendPath(REVIEWS_ENDPOINT_SEGMENT)
                 .build();
 
         URL url = null;
