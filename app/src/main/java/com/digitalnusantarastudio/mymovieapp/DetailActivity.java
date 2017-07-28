@@ -55,7 +55,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Intent intent = getIntent();
         try {
             movie_json_object = new JSONObject(intent.getStringExtra(MOVIE_ITEM));
-            movie_id = movie_json_object.getString("id");
             title_textview.setText(movie_json_object.getString("original_title"));
             synopsis.setText(movie_json_object.getString("overview"));
             user_rating_textview.setText(movie_json_object.getString("vote_average"));
@@ -64,6 +63,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             Glide.with(this)
                     .load(poster_url)
                     .into(movie_poster_imageview);
+            if(movie_json_object.has("id"))
+                movie_id = movie_json_object.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -88,10 +89,12 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     public void refresh_data() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(NetworkUtils.isOnline(cm)){
-            new DetailActivity.NetworkConnectionTask().execute(movie_id);
-        } else {
-            Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
+        if (movie_id != null){
+            if(NetworkUtils.isOnline(cm)){
+                new DetailActivity.NetworkConnectionTask().execute(movie_id);
+            } else {
+                Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
+            }
         }
     }
     /**
