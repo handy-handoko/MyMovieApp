@@ -1,5 +1,6 @@
 package com.digitalnusantarastudio.mymovieapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private String movie_id;
     private final static String TRAILER_TAG = "trailer";
     private final static String REVIEW_TAG = "review";
+    private JSONObject movie_json_object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         //fill view with data passed from intent to view
         Intent intent = getIntent();
         try {
-            JSONObject movie_json_object = new JSONObject(intent.getStringExtra(MOVIE_ITEM));
+            movie_json_object = new JSONObject(intent.getStringExtra(MOVIE_ITEM));
             movie_id = movie_json_object.getString("id");
             title_textview.setText(movie_json_object.getString("original_title"));
             synopsis.setText(movie_json_object.getString("overview"));
@@ -147,6 +150,26 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "An error occured", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void save_movie(View v){
+        ContentValues contentValues = new ContentValues();
+
+        try {
+            contentValues.put(MovieContract.MovieEntry.COLLUMN_TITLE, movie_json_object.getString("original_title"));
+            contentValues.put(MovieContract.MovieEntry.COLLUMN_POSTER_IMAGE_NAME, movie_json_object.getString("poster_path"));
+            contentValues.put(MovieContract.MovieEntry.COLLUMN_SYNOPSIS, movie_json_object.getString("overview"));
+            contentValues.put(MovieContract.MovieEntry.COLLUMN_RATING, movie_json_object.getString("vote_average"));
+            contentValues.put(MovieContract.MovieEntry.COLLUMN_RELEASE_DATE, movie_json_object.getString("release_date"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Insert the content values via a ContentResolver
+        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+
+        if(uri != null) {
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
         }
     }
 }
