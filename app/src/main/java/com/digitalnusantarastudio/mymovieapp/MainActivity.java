@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,13 +25,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener{
+public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener, LoaderManager.LoaderCallbacks<JSONArray>{
 
     private RecyclerView movie_recycler_view;
     private MovieAdapter adapter;
     private static final String MOVIE_ITEM = "movie";
     private static final String LIFECYCLE_CALLBACKS_KEY = "sort_by";
+    private static final String SORT_BY_BUNDLE_KEY = "sort";
     private String sort_by;
+    private static final int MOVIES_LOADER = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     public void refresh_data() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if(NetworkUtils.isOnline(cm)){
-            new NetworkConnectionTask().execute(sort_by);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(SORT_BY_BUNDLE_KEY, sort_by);
+
+            LoaderManager loaderManager = getSupportLoaderManager();
+
+            Loader<String> githubSearchLoader = loaderManager.getLoader(MOVIES_LOADER);
+            // COMPLETED (23) If the Loader was null, initialize it. Else, restart it.
+            if (githubSearchLoader == null) {
+                loaderManager.initLoader(MOVIES_LOADER, bundle, this);
+            } else {
+                loaderManager.restartLoader(MOVIES_LOADER, bundle, this);
+            }
         } else {
             Toast.makeText(this, "Connection Error. Ensure your phone is connect to internet.", Toast.LENGTH_LONG).show();
         }
@@ -87,34 +104,43 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         }
     }
 
-    /**
-     * Task to connect to internet
-     * 1st param is url in String
-     * 3rd param is JSON array which respond from internet
-     */
-    private class NetworkConnectionTask extends AsyncTask<String, Void, JSONArray>{
+    @Override
+    public Loader<JSONArray> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<JSONArray>(this) {
 
-        @Override
-        protected JSONArray doInBackground(String... params) {
-            URL url = NetworkUtils.buildUrl(params[0]);
-            String response;
-            JSONArray movie_list_json_array = null;
-            try {
-                response = NetworkUtils.getResponseFromHttpUrl(url);
-                JSONObject response_json_object = new JSONObject(response);
-                movie_list_json_array = response_json_object.getJSONArray("results");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            @Override
+            protected void onStartLoading() {
+                forceLoad();
             }
-            return movie_list_json_array;
-        }
 
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            adapter.setMovieData(jsonArray);
-        }
+            @Override
+            public JSONArray loadInBackground() {
+                String sortByParam = args.getString(SORT_BY_BUNDLE_KEY);
+                URL url = NetworkUtils.buildUrl(sortByParam);
+                String response;
+                JSONArray movie_list_json_array = null;
+                try {
+                    response = NetworkUtils.getResponseFromHttpUrl(url);
+                    JSONObject response_json_object = new JSONObject(response);
+                    movie_list_json_array = response_json_object.getJSONArray("results");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return movie_list_json_array;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<JSONArray> loader, JSONArray data) {
+        adapter.setMovieData(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<JSONArray> loader) {
+
     }
 
     @Override
