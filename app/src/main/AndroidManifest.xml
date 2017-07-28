@@ -22,7 +22,7 @@
         <activity android:name=".DetailActivity"></activity>
         <provider
             android:authorities="com.digitalnusantarastudio.mymovieapp"
-            android:name="com.digitalnusantarastudio.mymovieapp.MovieContentProvider"/>
+            android:name="com.digitalnusantarastudio.mymovieapp.data.MovieContentProvider"/>
     </application>
 
 </manifest>

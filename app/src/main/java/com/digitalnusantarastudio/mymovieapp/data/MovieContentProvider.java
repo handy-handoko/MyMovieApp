@@ -1,4 +1,4 @@
-package com.digitalnusantarastudio.mymovieapp;
+package com.digitalnusantarastudio.mymovieapp.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

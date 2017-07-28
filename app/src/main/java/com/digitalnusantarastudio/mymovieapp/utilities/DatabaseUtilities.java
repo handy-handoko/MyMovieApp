@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.digitalnusantarastudio.mymovieapp.MovieContract;
-import com.digitalnusantarastudio.mymovieapp.MovieDbHelper;
+import com.digitalnusantarastudio.mymovieapp.data.MovieContract;
+import com.digitalnusantarastudio.mymovieapp.data.MovieDbHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

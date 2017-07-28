@@ -1,4 +1,4 @@
-package com.digitalnusantarastudio.mymovieapp;
+package com.digitalnusantarastudio.mymovieapp.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

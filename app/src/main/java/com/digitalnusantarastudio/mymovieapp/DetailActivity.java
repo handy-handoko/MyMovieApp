@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.digitalnusantarastudio.mymovieapp.adapter.ReviewAdapter;
 import com.digitalnusantarastudio.mymovieapp.adapter.TrailerAdapter;
+import com.digitalnusantarastudio.mymovieapp.data.MovieContract;
 import com.digitalnusantarastudio.mymovieapp.utilities.NetworkUtils;
 
 import org.json.JSONArray;
