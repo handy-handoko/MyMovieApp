@@ -24,10 +24,10 @@ public class MovieContract {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
 
         public static final String TABLE_NAME = "movie";
-        public static final String COLLUMN_TITLE = "title";
+        public static final String COLLUMN_TITLE = "original_title";
         public static final String COLLUMN_POSTER_IMAGE_NAME = "poster_path";
-        public static final String COLLUMN_SYNOPSIS = "synopsis";
-        public static final String COLLUMN_RATING = "rating";
+        public static final String COLLUMN_SYNOPSIS = "overview";
+        public static final String COLLUMN_RATING = "vote_average";
         public static final String COLLUMN_RELEASE_DATE = "release_date";
 
     }
