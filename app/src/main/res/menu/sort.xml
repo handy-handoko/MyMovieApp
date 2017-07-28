@@ -8,4 +8,7 @@
     <item android:title="@string/top_rated"
         android:id="@+id/action_top_rated"
         app:showAsAction="never"/>
+    <item android:title="Saved"
+        android:id="@+id/action_saved"
+        app:showAsAction="never"/>
 </menu>
