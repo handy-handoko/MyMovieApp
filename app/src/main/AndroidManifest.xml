@@ -20,6 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity"></activity>
+        <provider
+            android:authorities="com.digitalnusantarastudio.mymovieapp"
+            android:name="com.digitalnusantarastudio.mymovieapp.MovieContentProvider"/>
     </application>
 
 </manifest>
